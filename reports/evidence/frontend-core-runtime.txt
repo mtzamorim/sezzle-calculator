@@ -1,0 +1,256 @@
+TAP version 13
+# Subtest: real TypeScript client -> real Go API: add
+ok 1 - real TypeScript client -> real Go API: add
+  ---
+  duration_ms: 43.908747
+  type: 'test'
+  ...
+# Subtest: real TypeScript client -> real Go API: subtract
+ok 2 - real TypeScript client -> real Go API: subtract
+  ---
+  duration_ms: 4.968044
+  type: 'test'
+  ...
+# Subtest: real TypeScript client -> real Go API: multiply
+ok 3 - real TypeScript client -> real Go API: multiply
+  ---
+  duration_ms: 3.01616
+  type: 'test'
+  ...
+# Subtest: real TypeScript client -> real Go API: divide
+ok 4 - real TypeScript client -> real Go API: divide
+  ---
+  duration_ms: 3.980104
+  type: 'test'
+  ...
+# Subtest: real TypeScript client -> real Go API: power
+ok 5 - real TypeScript client -> real Go API: power
+  ---
+  duration_ms: 2.93618
+  type: 'test'
+  ...
+# Subtest: real TypeScript client -> real Go API: sqrt
+ok 6 - real TypeScript client -> real Go API: sqrt
+  ---
+  duration_ms: 2.438339
+  type: 'test'
+  ...
+# Subtest: real TypeScript client -> real Go API: percent
+ok 7 - real TypeScript client -> real Go API: percent
+  ---
+  duration_ms: 2.39293
+  type: 'test'
+  ...
+# Subtest: validation rejects ""
+ok 8 - validation rejects ""
+  ---
+  duration_ms: 0.426112
+  type: 'test'
+  ...
+# Subtest: validation rejects " "
+ok 9 - validation rejects " "
+  ---
+  duration_ms: 0.342216
+  type: 'test'
+  ...
+# Subtest: validation rejects "abc"
+ok 10 - validation rejects "abc"
+  ---
+  duration_ms: 0.398531
+  type: 'test'
+  ...
+# Subtest: validation rejects "0x10"
+ok 11 - validation rejects "0x10"
+  ---
+  duration_ms: 0.108583
+  type: 'test'
+  ...
+# Subtest: validation rejects "1,2"
+ok 12 - validation rejects "1,2"
+  ---
+  duration_ms: 0.11921
+  type: 'test'
+  ...
+# Subtest: validation rejects "1_000"
+ok 13 - validation rejects "1_000"
+  ---
+  duration_ms: 0.063115
+  type: 'test'
+  ...
+# Subtest: validation rejects "NaN"
+ok 14 - validation rejects "NaN"
+  ---
+  duration_ms: 0.058298
+  type: 'test'
+  ...
+# Subtest: validation rejects "Infinity"
+ok 15 - validation rejects "Infinity"
+  ---
+  duration_ms: 0.05962
+  type: 'test'
+  ...
+# Subtest: validation rejects "1e999"
+ok 16 - validation rejects "1e999"
+  ---
+  duration_ms: 0.121413
+  type: 'test'
+  ...
+# Subtest: validation rejects "1e"
+ok 17 - validation rejects "1e"
+  ---
+  duration_ms: 0.068934
+  type: 'test'
+  ...
+# Subtest: validation rejects "--1"
+ok 18 - validation rejects "--1"
+  ---
+  duration_ms: 0.057586
+  type: 'test'
+  ...
+# Subtest: validation accepts " -1.2 "
+ok 19 - validation accepts " -1.2 "
+  ---
+  duration_ms: 0.226142
+  type: 'test'
+  ...
+# Subtest: validation accepts "+.5"
+ok 20 - validation accepts "+.5"
+  ---
+  duration_ms: 0.133792
+  type: 'test'
+  ...
+# Subtest: validation accepts "1e2"
+ok 21 - validation accepts "1e2"
+  ---
+  duration_ms: 0.077177
+  type: 'test'
+  ...
+# Subtest: validation accepts "0"
+ok 22 - validation accepts "0"
+  ---
+  duration_ms: 0.134293
+  type: 'test'
+  ...
+# Subtest: unary, zero-division and negative-root validation
+ok 23 - unary, zero-division and negative-root validation
+  ---
+  duration_ms: 0.143887
+  type: 'test'
+  ...
+# Subtest: display formatting and expression labels
+ok 24 - display formatting and expression labels
+  ---
+  duration_ms: 1.729669
+  type: 'test'
+  ...
+# Subtest: response contract rejects malformed/mismatched payload 1
+ok 25 - response contract rejects malformed/mismatched payload 1
+  ---
+  duration_ms: 0.811284
+  type: 'test'
+  ...
+# Subtest: response contract rejects malformed/mismatched payload 2
+ok 26 - response contract rejects malformed/mismatched payload 2
+  ---
+  duration_ms: 0.274153
+  type: 'test'
+  ...
+# Subtest: response contract rejects malformed/mismatched payload 3
+ok 27 - response contract rejects malformed/mismatched payload 3
+  ---
+  duration_ms: 0.219522
+  type: 'test'
+  ...
+# Subtest: response contract rejects malformed/mismatched payload 4
+ok 28 - response contract rejects malformed/mismatched payload 4
+  ---
+  duration_ms: 0.138138
+  type: 'test'
+  ...
+# Subtest: response contract rejects malformed/mismatched payload 5
+ok 29 - response contract rejects malformed/mismatched payload 5
+  ---
+  duration_ms: 0.124537
+  type: 'test'
+  ...
+# Subtest: response contract rejects malformed/mismatched payload 6
+ok 30 - response contract rejects malformed/mismatched payload 6
+  ---
+  duration_ms: 0.232731
+  type: 'test'
+  ...
+# Subtest: response contract rejects malformed/mismatched payload 7
+ok 31 - response contract rejects malformed/mismatched payload 7
+  ---
+  duration_ms: 0.253963
+  type: 'test'
+  ...
+# Subtest: response contract rejects malformed/mismatched payload 8
+ok 32 - response contract rejects malformed/mismatched payload 8
+  ---
+  duration_ms: 0.164869
+  type: 'test'
+  ...
+# Subtest: response contract rejects malformed/mismatched payload 9
+ok 33 - response contract rejects malformed/mismatched payload 9
+  ---
+  duration_ms: 0.217227
+  type: 'test'
+  ...
+# Subtest: real backend math error preserves status and message
+ok 34 - real backend math error preserves status and message
+  ---
+  duration_ms: 11.808273
+  type: 'test'
+  ...
+# Subtest: network failure is mapped without leaking implementation details
+ok 35 - network failure is mapped without leaking implementation details
+  ---
+  duration_ms: 0.425212
+  type: 'test'
+  ...
+# Subtest: unreadable server body is rejected
+ok 36 - unreadable server body is rejected
+  ---
+  duration_ms: 0.298561
+  type: 'test'
+  ...
+# Subtest: already-cancelled request never starts transport
+ok 37 - already-cancelled request never starts transport
+  ---
+  duration_ms: 0.183757
+  type: 'test'
+  ...
+# Subtest: active cancellation reaches the transport
+ok 38 - active cancellation reaches the transport
+  ---
+  duration_ms: 0.421736
+  type: 'test'
+  ...
+# Subtest: cancelled transport cannot publish a late successful response
+ok 39 - cancelled transport cannot publish a late successful response
+  ---
+  duration_ms: 0.230948
+  type: 'test'
+  ...
+# Subtest: timeout also bounds a delayed response body (real 10-second timer)
+ok 40 - timeout also bounds a delayed response body (real 10-second timer)
+  ---
+  duration_ms: 10001.893404
+  type: 'test'
+  ...
+# Subtest: the public API error remains identifiable
+ok 41 - the public API error remains identifiable
+  ---
+  duration_ms: 0.15232
+  type: 'test'
+  ...
+1..41
+# tests 41
+# suites 0
+# pass 41
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10095.889648

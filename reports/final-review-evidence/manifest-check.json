@@ -1,0 +1,9 @@
+{
+  "checked": 72,
+  "errors": [
+    {
+      "file": "README.md",
+      "error": "hash mismatch"
+    }
+  ]
+}

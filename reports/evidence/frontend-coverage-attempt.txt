@@ -1,0 +1,7 @@
+
+> sezzle-calculator-frontend@1.0.0 coverage
+> vitest run --coverage
+
+sh: 1: vitest: not found
+
+Observed exit code: 127

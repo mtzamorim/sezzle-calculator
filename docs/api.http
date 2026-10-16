@@ -1,0 +1,41 @@
+# Optional HTTP-client examples. The README includes curl equivalents.
+@baseUrl = http://localhost:8080
+
+### Health
+GET {{baseUrl}}/api/v1/health
+
+### Addition: 20
+POST {{baseUrl}}/api/v1/calculate
+Content-Type: application/json
+
+{"operation":"add","a":12,"b":8}
+
+### Square root: 9 (only one operand)
+POST {{baseUrl}}/api/v1/calculate
+Content-Type: application/json
+
+{"operation":"sqrt","a":81}
+
+### Percentage: 30
+POST {{baseUrl}}/api/v1/calculate
+Content-Type: application/json
+
+{"operation":"percent","a":15,"b":200}
+
+### Expected 422: zero divisor
+POST {{baseUrl}}/api/v1/calculate
+Content-Type: application/json
+
+{"operation":"divide","a":10,"b":0}
+
+### Expected 422: non-finite result
+POST {{baseUrl}}/api/v1/calculate
+Content-Type: application/json
+
+{"operation":"multiply","a":1e308,"b":1e308}
+
+### Expected 400: numeric strings are not JSON numbers
+POST {{baseUrl}}/api/v1/calculate
+Content-Type: application/json
+
+{"operation":"add","a":"1","b":2}

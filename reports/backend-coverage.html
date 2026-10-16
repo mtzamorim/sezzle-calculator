@@ -1,0 +1,438 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>server: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/matheusAmorim123/sezzle-calculator/backend/cmd/server/main.go (56.9%)</option>
+				
+				<option value="file1">github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator/calculator.go (100.0%)</option>
+				
+				<option value="file2">github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go (96.3%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "context"
+        "errors"
+        "log/slog"
+        "net"
+        "net/http"
+        "os"
+        "os/signal"
+        "path/filepath"
+        "strings"
+        "syscall"
+        "time"
+
+        "github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi"
+)
+
+func main() <span class="cov0" title="0">{
+        logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+        port := os.Getenv("PORT")
+        if port == "" </span><span class="cov0" title="0">{
+                port = "8080"
+        }</span>
+
+        <span class="cov0" title="0">api := httpapi.NewHandler()
+        handler := api
+        if root := os.Getenv("STATIC_DIR"); root != "" </span><span class="cov0" title="0">{
+                handler = withFrontend(api, root)
+        }</span>
+        <span class="cov0" title="0">server := &amp;http.Server{
+                Addr:              ":" + port,
+                Handler:           handler,
+                ReadHeaderTimeout: 5 * time.Second,
+                ReadTimeout:       10 * time.Second,
+                WriteTimeout:      15 * time.Second,
+                IdleTimeout:       60 * time.Second,
+        }
+
+        ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+        defer stop()
+        listener, err := net.Listen("tcp", server.Addr)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.Error("listen failed", "error", err)
+                os.Exit(1)
+        }</span>
+        <span class="cov0" title="0">logger.Info("calculator ready", "address", listener.Addr())
+        if err := serve(ctx, server, listener); err != nil </span><span class="cov0" title="0">{
+                logger.Error("server failed", "error", err)
+                os.Exit(1)
+        }</span>
+}
+
+// Shutdown makes Serve return immediately. Keep the main goroutine alive until
+// in-flight requests have drained, instead of exiting as soon as Serve returns.
+func serve(ctx context.Context, server *http.Server, listener net.Listener) error <span class="cov5" title="3">{
+        stopped := make(chan error, 1)
+        go func() </span><span class="cov5" title="3">{ stopped &lt;- server.Serve(listener) }</span>()
+        <span class="cov5" title="3">select </span>{
+        case err := &lt;-stopped:<span class="cov3" title="2">
+                if errors.Is(err, http.ErrServerClosed) </span><span class="cov1" title="1">{
+                        return nil
+                }</span>
+                <span class="cov1" title="1">return err</span>
+        case &lt;-ctx.Done():<span class="cov1" title="1">
+                shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+                defer cancel()
+                if err := server.Shutdown(shutdownCtx); err != nil </span><span class="cov0" title="0">{
+                        _ = server.Close()
+                        return err
+                }</span>
+                <span class="cov1" title="1">if err := &lt;-stopped; !errors.Is(err, http.ErrServerClosed) </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov1" title="1">return nil</span>
+        }
+}
+
+// In the optional Docker image, the same Go server serves the built React app.
+// API paths never fall through to index.html.
+func withFrontend(api http.Handler, root string) http.Handler <span class="cov1" title="1">{
+        files := http.FileServer(http.Dir(root))
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="9">{
+                if r.URL.Path == "/api" || strings.HasPrefix(r.URL.Path, "/api/") </span><span class="cov5" title="3">{
+                        api.ServeHTTP(w, r)
+                        return
+                }</span>
+                <span class="cov8" title="6">if r.Method != http.MethodGet &amp;&amp; r.Method != http.MethodHead </span><span class="cov1" title="1">{
+                        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+                        return
+                }</span>
+                <span class="cov7" title="5">w.Header().Set("X-Content-Type-Options", "nosniff")
+                path := filepath.Join(root, filepath.Clean("/"+r.URL.Path))
+                if info, err := os.Stat(path); err == nil &amp;&amp; !info.IsDir() </span><span class="cov1" title="1">{
+                        files.ServeHTTP(w, r)
+                        return
+                }</span>
+                // Missing JS/CSS must be a 404, never a successful HTML response.
+                <span class="cov6" title="4">if filepath.Ext(r.URL.Path) != "" || strings.HasPrefix(r.URL.Path, "/assets/") </span><span class="cov3" title="2">{
+                        http.NotFound(w, r)
+                        return
+                }</span>
+                <span class="cov3" title="2">http.ServeFile(w, r, filepath.Join(root, "index.html"))</span>
+        })
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">// Package calculator contains the pure arithmetic rules and their validation.
+// It has no knowledge of HTTP, JSON, or persistence.
+package calculator
+
+import (
+        "math"
+)
+
+// Operation lists the supported arithmetic operations.
+type Operation string
+
+const (
+        Add        Operation = "add"
+        Subtract   Operation = "subtract"
+        Multiply   Operation = "multiply"
+        Divide     Operation = "divide"
+        Power      Operation = "power"
+        SquareRoot Operation = "sqrt"
+        Percent    Operation = "percent"
+)
+
+// Input uses pointers so that missing JSON operands can be distinguished from 0.
+type Input struct {
+        Operation Operation `json:"operation"`
+        A         *float64  `json:"a"`
+        B         *float64  `json:"b,omitempty"`
+}
+
+// Failure is an expected domain error. The transport layer maps Code to HTTP.
+type Failure struct {
+        Code    string `json:"code"`
+        Message string `json:"message"`
+}
+
+func (e *Failure) Error() string <span class="cov1" title="1">{ return e.Message }</span>
+
+func invalid(message string) error   <span class="cov5" title="7">{ return &amp;Failure{Code: "invalid_input", Message: message} }</span>
+func undefined(message string) error <span class="cov6" title="9">{ return &amp;Failure{Code: "math_error", Message: message} }</span>
+
+// Calculate evaluates an operation. Percentage means "a percent of b":
+// e.g. (percent, 15, 200) = 30. Square root accepts only a.
+func Calculate(in Input) (float64, error) <span class="cov10" title="35">{
+        switch in.Operation </span>{
+        case Add, Subtract, Multiply, Divide, Power, SquareRoot, Percent:<span class="cov9" title="34"></span>
+        default:<span class="cov1" title="1">
+                return 0, &amp;Failure{Code: "unsupported_operation", Message: "Unsupported operation."}</span>
+        }
+
+        <span class="cov9" title="34">if in.A == nil </span><span class="cov1" title="1">{
+                return 0, invalid("The first operand (a) is required.")
+        }</span>
+        <span class="cov9" title="33">a := *in.A
+        if math.IsNaN(a) || math.IsInf(a, 0) </span><span class="cov2" title="2">{
+                return 0, invalid("The first operand (a) must be a finite number.")
+        }</span>
+
+        <span class="cov9" title="31">if in.Operation == SquareRoot </span><span class="cov5" title="5">{
+                if in.B != nil </span><span class="cov1" title="1">{
+                        return 0, invalid("Square root accepts only the first operand (a).")
+                }</span>
+                <span class="cov4" title="4">if a &lt; 0 </span><span class="cov1" title="1">{
+                        return 0, undefined("Cannot calculate the square root of a negative number.")
+                }</span>
+                <span class="cov3" title="3">return math.Sqrt(a), nil</span>
+        }
+
+        <span class="cov9" title="26">if in.B == nil </span><span class="cov2" title="2">{
+                return 0, invalid("The second operand (b) is required.")
+        }</span>
+        <span class="cov9" title="24">b := *in.B
+        if math.IsNaN(b) || math.IsInf(b, 0) </span><span class="cov1" title="1">{
+                return 0, invalid("The second operand (b) must be a finite number.")
+        }</span>
+
+        <span class="cov8" title="23">var result float64
+        switch in.Operation </span>{
+        case Add:<span class="cov4" title="4">
+                result = a + b</span>
+        case Subtract:<span class="cov1" title="1">
+                result = a - b</span>
+        case Multiply:<span class="cov3" title="3">
+                result = a * b</span>
+        case Divide:<span class="cov5" title="5">
+                if b == 0 </span><span class="cov3" title="3">{
+                        return 0, undefined("Division by zero is not allowed.")
+                }</span>
+                <span class="cov2" title="2">result = a / b</span>
+        case Power:<span class="cov5" title="7">
+                result = math.Pow(a, b)</span>
+        case Percent:<span class="cov3" title="3">
+                result = a / 100 * b</span>
+        }
+
+        <span class="cov8" title="20">if math.IsNaN(result) || math.IsInf(result, 0) </span><span class="cov5" title="5">{
+                return 0, undefined("The result is not a finite real number.")
+        }</span>
+        <span class="cov7" title="15">return result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">// Package httpapi exposes the calculator through a small JSON REST API.
+package httpapi
+
+import (
+        "encoding/json"
+        "errors"
+        "io"
+        "mime"
+        "net/http"
+        "strings"
+
+        "github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator"
+)
+
+const maxRequestBody = 16 &lt;&lt; 10 // 16 KiB, including trailing whitespace.
+
+type calculationResponse struct {
+        Operation calculator.Operation `json:"operation"`
+        A         float64              `json:"a"`
+        B         *float64             `json:"b,omitempty"`
+        Result    float64              `json:"result"`
+}
+
+type errorResponse struct {
+        Error *calculator.Failure `json:"error"`
+}
+
+// NewHandler returns an HTTP handler suitable for httptest or http.Server.
+func NewHandler() http.Handler <span class="cov8" title="40">{
+        mux := http.NewServeMux()
+        mux.HandleFunc("/api/v1/health", allowMethods([]string{"GET", "HEAD"}, func(w http.ResponseWriter, _ *http.Request) </span><span class="cov2" title="2">{
+                writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
+        }</span>))
+        <span class="cov8" title="40">mux.HandleFunc("/api/v1/calculate", allowMethods([]string{"POST"}, calculate))
+        mux.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) </span><span class="cov2" title="2">{
+                writeError(w, http.StatusNotFound, "not_found", "The requested API endpoint does not exist.")
+        }</span>)
+        <span class="cov8" title="40">return mux</span>
+}
+
+func allowMethods(allowed []string, next http.HandlerFunc) http.HandlerFunc <span class="cov10" title="80">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov8" title="38">{
+                for _, method := range allowed </span><span class="cov8" title="40">{
+                        if r.Method == method </span><span class="cov8" title="35">{
+                                next(w, r)
+                                return
+                        }</span>
+                }
+                <span class="cov3" title="3">w.Header().Set("Allow", strings.Join(allowed, ", "))
+                writeError(w, http.StatusMethodNotAllowed, "method_not_allowed", "The HTTP method is not supported for this endpoint.")</span>
+        }
+}
+
+func calculate(w http.ResponseWriter, r *http.Request) <span class="cov8" title="33">{
+        mediaType, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+        if err != nil || mediaType != "application/json" </span><span class="cov2" title="2">{
+                writeError(w, http.StatusUnsupportedMediaType, "unsupported_media_type", "Content-Type must be application/json.")
+                return
+        }</span>
+        <span class="cov8" title="31">r.Body = http.MaxBytesReader(w, r.Body, maxRequestBody)
+        decoder := json.NewDecoder(r.Body)
+        decoder.DisallowUnknownFields()
+
+        var input *calculator.Input
+        if err := decoder.Decode(&amp;input); err != nil </span><span class="cov5" title="8">{
+                writeDecodeError(w, err)
+                return
+        }</span>
+        <span class="cov7" title="23">if input == nil </span><span class="cov1" title="1">{
+                writeError(w, http.StatusBadRequest, "invalid_json", "Request body must be a JSON object.")
+                return
+        }</span>
+        // Check the second read too: an otherwise valid object followed by more than
+        // 16 KiB of whitespace is still an oversized request, not a different 400 error.
+        <span class="cov7" title="22">if err := decoder.Decode(&amp;struct{}{}); err != io.EOF </span><span class="cov3" title="3">{
+                writeDecodeError(w, err)
+                return
+        }</span>
+        <span class="cov7" title="19">result, err := calculator.Calculate(*input)
+        if err != nil </span><span class="cov4" title="7">{
+                var failure *calculator.Failure
+                if errors.As(err, &amp;failure) </span><span class="cov4" title="7">{
+                        status := http.StatusBadRequest
+                        if failure.Code == "math_error" </span><span class="cov3" title="3">{
+                                status = http.StatusUnprocessableEntity
+                        }</span>
+                        <span class="cov4" title="7">writeJSON(w, status, errorResponse{Error: failure})
+                        return</span>
+                }
+                <span class="cov0" title="0">writeError(w, http.StatusInternalServerError, "internal_error", "Unable to complete the calculation.")
+                return</span>
+        }
+        <span class="cov6" title="12">writeJSON(w, http.StatusOK, calculationResponse{Operation: input.Operation, A: *input.A, B: input.B, Result: result})</span>
+}
+
+func writeDecodeError(w http.ResponseWriter, err error) <span class="cov5" title="11">{
+        var tooLarge *http.MaxBytesError
+        if errors.As(err, &amp;tooLarge) </span><span class="cov2" title="2">{
+                writeError(w, http.StatusRequestEntityTooLarge, "payload_too_large", "The request body exceeds 16 KiB.")
+                return
+        }</span>
+        <span class="cov5" title="9">writeError(w, http.StatusBadRequest, "invalid_json", "Request body must contain exactly one JSON object with numeric operands.")</span>
+}
+
+func writeError(w http.ResponseWriter, status int, code, message string) <span class="cov7" title="19">{
+        writeJSON(w, status, errorResponse{Error: &amp;calculator.Failure{Code: code, Message: message}})
+}</span>
+
+func writeJSON(w http.ResponseWriter, status int, body any) <span class="cov8" title="40">{
+        w.Header().Set("Content-Type", "application/json; charset=utf-8")
+        w.Header().Set("Cache-Control", "no-store")
+        w.Header().Set("X-Content-Type-Options", "nosniff")
+        w.WriteHeader(status)
+        _ = json.NewEncoder(w).Encode(body)
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

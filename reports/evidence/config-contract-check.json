@@ -1,0 +1,8 @@
+{
+  "scope": "YAML parsing, local reference/schema validation, and positive/negative JSON examples; not a full OpenAPI compatibility/remote CI run",
+  "schemasValidated": 8,
+  "positiveRequestExamples": 3,
+  "negativeRequestExamples": 5,
+  "positiveResponseExamples": 2,
+  "status": "passed"
+}

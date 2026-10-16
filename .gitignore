@@ -1,0 +1,27 @@
+# Frontend build and dependency artifacts
+node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo
+frontend/.vite/
+
+# Reports produced locally/CI (except committed summary)
+reports/frontend-coverage/
+reports/*.out
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+.env
+.env.*
+
+# Generated verification/browser files
+bin/
+reports/local-verification/
+reports/e2e/
+reports/e2e-artifacts/
+reports/e2e-results.json
+reports/screenshots/
+*.zip

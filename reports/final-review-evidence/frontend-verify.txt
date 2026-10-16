@@ -1,0 +1,11 @@
+
+> sezzle-calculator-frontend@1.0.0 verify
+> npm run coverage && npm run build
+
+
+> sezzle-calculator-frontend@1.0.0 coverage
+> vitest run --coverage
+
+sh: 1: vitest: not found
+
+EXIT_CODE=127

@@ -1,0 +1,92 @@
+{
+  "startedAt": "2026-10-15T09:04:12.768Z",
+  "node": "v22.16.0",
+  "options": [
+    "--backend-only",
+    "--race"
+  ],
+  "steps": [
+    {
+      "name": "go-version",
+      "command": [
+        "go",
+        "version"
+      ],
+      "exitCode": 0,
+      "passed": true
+    },
+    {
+      "name": "go-format",
+      "command": [
+        "gofmt",
+        "-l",
+        "cmd",
+        "internal"
+      ],
+      "exitCode": 0,
+      "passed": true
+    },
+    {
+      "name": "go-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exitCode": 0,
+      "passed": true
+    },
+    {
+      "name": "go-tests",
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "-count=1",
+        "-coverprofile=../reports/backend-coverage.out",
+        "./..."
+      ],
+      "exitCode": 0,
+      "passed": true
+    },
+    {
+      "name": "go-coverage",
+      "command": [
+        "go",
+        "tool",
+        "cover",
+        "-func=../reports/backend-coverage.out"
+      ],
+      "exitCode": 0,
+      "passed": true
+    },
+    {
+      "name": "go-coverage-html",
+      "command": [
+        "go",
+        "tool",
+        "cover",
+        "-html=../reports/backend-coverage.out",
+        "-o",
+        "../reports/backend-coverage.html"
+      ],
+      "exitCode": 0,
+      "passed": true
+    },
+    {
+      "name": "go-build",
+      "command": [
+        "go",
+        "build",
+        "-trimpath",
+        "-o",
+        "../bin/calculator",
+        "./cmd/server"
+      ],
+      "exitCode": 0,
+      "passed": true
+    }
+  ],
+  "status": "passed",
+  "finishedAt": "2026-10-15T09:04:15.352Z"
+}

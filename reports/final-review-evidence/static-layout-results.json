@@ -1,0 +1,130 @@
+[
+  {
+    "width": 1440,
+    "state": "initial",
+    "scrollWidth": 1440,
+    "buttons": 9,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 1440,
+    "state": "result",
+    "scrollWidth": 1440,
+    "buttons": 10,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 1440,
+    "state": "error",
+    "scrollWidth": 1440,
+    "buttons": 9,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 1440,
+    "state": "extreme",
+    "scrollWidth": 1440,
+    "buttons": 10,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 820,
+    "state": "initial",
+    "scrollWidth": 820,
+    "buttons": 9,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 820,
+    "state": "result",
+    "scrollWidth": 820,
+    "buttons": 10,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 820,
+    "state": "error",
+    "scrollWidth": 820,
+    "buttons": 9,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 820,
+    "state": "extreme",
+    "scrollWidth": 820,
+    "buttons": 10,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 390,
+    "state": "initial",
+    "scrollWidth": 390,
+    "buttons": 9,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 390,
+    "state": "result",
+    "scrollWidth": 390,
+    "buttons": 10,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 390,
+    "state": "error",
+    "scrollWidth": 390,
+    "buttons": 9,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 390,
+    "state": "extreme",
+    "scrollWidth": 390,
+    "buttons": 10,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 320,
+    "state": "initial",
+    "scrollWidth": 320,
+    "buttons": 9,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 320,
+    "state": "result",
+    "scrollWidth": 320,
+    "buttons": 10,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 320,
+    "state": "error",
+    "scrollWidth": 320,
+    "buttons": 9,
+    "inputs": 2,
+    "clipped": []
+  },
+  {
+    "width": 320,
+    "state": "extreme",
+    "scrollWidth": 320,
+    "buttons": 10,
+    "inputs": 2,
+    "clipped": []
+  }
+]

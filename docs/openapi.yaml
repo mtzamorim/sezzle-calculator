@@ -1,0 +1,209 @@
+openapi: 3.1.0
+info:
+  title: Clarity Calculator API
+  version: 1.0.0
+  description: Stateless calculation service. Percentage means a/100*b. Square root
+    accepts one operand. Numeric domain constraints are checked at runtime; 0^0 follows
+    Go math.Pow and returns 1. No authentication or persistence.
+servers:
+- url: http://localhost:8080
+paths:
+  /api/v1/health:
+    get:
+      operationId: health
+      summary: Check service availability
+      responses:
+        '200':
+          description: Service is available.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /api/v1/calculate:
+    post:
+      operationId: calculate
+      summary: Perform one calculation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculationInput'
+            examples:
+              addition:
+                value:
+                  operation: add
+                  a: 12
+                  b: 8
+              squareRoot:
+                value:
+                  operation: sqrt
+                  a: 81
+              percentage:
+                value:
+                  operation: percent
+                  a: 15
+                  b: 200
+      responses:
+        '200':
+          description: Result with echoed operation and operands. All values are finite
+            binary floating-point numbers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationResult'
+        '400':
+          description: Invalid JSON, missing operand or unsupported operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Unknown API path.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method not supported; response includes Allow.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          headers:
+            Allow:
+              description: Supported methods.
+              schema:
+                type: string
+        '413':
+          description: Body exceeds 16 KiB, including trailing input.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '415':
+          description: Expected application/json.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Undefined or non-finite real calculation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Unexpected internal failure.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    BinaryInput:
+      type: object
+      additionalProperties: false
+      required:
+      - operation
+      - a
+      - b
+      properties:
+        operation:
+          type: string
+          enum:
+          - add
+          - subtract
+          - multiply
+          - divide
+          - power
+          - percent
+        a:
+          type: number
+        b:
+          type: number
+    SquareRootInput:
+      type: object
+      additionalProperties: false
+      required:
+      - operation
+      - a
+      properties:
+        operation:
+          const: sqrt
+        a:
+          type: number
+        b:
+          type: 'null'
+          description: Optional null is treated as absent. Prefer omitting this property.
+    CalculationInput:
+      oneOf:
+      - $ref: '#/components/schemas/BinaryInput'
+      - $ref: '#/components/schemas/SquareRootInput'
+    BinaryResult:
+      type: object
+      additionalProperties: false
+      required:
+      - operation
+      - a
+      - b
+      - result
+      properties:
+        operation:
+          type: string
+          enum:
+          - add
+          - subtract
+          - multiply
+          - divide
+          - power
+          - percent
+        a:
+          type: number
+        b:
+          type: number
+        result:
+          type: number
+    SquareRootResult:
+      type: object
+      additionalProperties: false
+      required:
+      - operation
+      - a
+      - result
+      properties:
+        operation:
+          const: sqrt
+        a:
+          type: number
+        result:
+          type: number
+    CalculationResult:
+      oneOf:
+      - $ref: '#/components/schemas/BinaryResult'
+      - $ref: '#/components/schemas/SquareRootResult'
+    Error:
+      type: object
+      additionalProperties: false
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+    Health:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      properties:
+        status:
+          const: ok

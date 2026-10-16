@@ -1,0 +1,33 @@
+{
+  "recordedAt": "2026-10-15T09:11:01.352950+00:00",
+  "sourceBase": "sezzle-calculator-complete-english.zip",
+  "toolchain": {
+    "go": "1.23.2",
+    "node": "22.16.0",
+    "npm": "10.9.2",
+    "standaloneTypeScript": "5.8.3"
+  },
+  "passed": {
+    "backendRaceTests": true,
+    "backendVet": true,
+    "backendBuild": true,
+    "backendStatementCoverage": 82.7,
+    "domainStatementCoverage": 100,
+    "httpStatementCoverage": 96.3,
+    "serverStatementCoverage": 56.9,
+    "goFuzzExecutions": 188379,
+    "standaloneFrontendCoreTests": 41,
+    "liveApiHealthAndScenarios": 13
+  },
+  "notVerified": [
+    "React component execution",
+    "Vitest coverage",
+    "Full frontend TypeScript build",
+    "Vite production build",
+    "Playwright/axe",
+    "Docker runtime",
+    "npm clean locked install",
+    "Remote repository/CI"
+  ],
+  "note": "Standalone frontend-core tests are not React/Vitest tests. Source package is not certified submission-ready."
+}

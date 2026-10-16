@@ -1,0 +1,13 @@
+PASS add
+PASS subtract
+PASS multiply
+PASS divide
+PASS power
+PASS sqrt
+PASS percent
+PASS HTTP 422 math_error
+PASS HTTP 422 math_error
+PASS HTTP 400 invalid_json
+PASS HTTP 400 invalid_json
+PASS HTTP 413 payload_too_large
+Live API smoke checks passed.

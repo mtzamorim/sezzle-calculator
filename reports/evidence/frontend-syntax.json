@@ -1,0 +1,6 @@
+{
+  "scope": "Syntax transpilation only; not a React run or a full project typecheck",
+  "typescript": "5.8.3",
+  "files": 16,
+  "errors": []
+}

@@ -1,0 +1,35 @@
+
+> go version
+go version go1.23.2 linux/amd64
+
+> gofmt -l cmd internal
+
+> go vet ./...
+
+> go test -race -count=1 -coverprofile=../reports/backend-coverage.out ./...
+ok  	github.com/matheusAmorim123/sezzle-calculator/backend/cmd/server	1.059s	coverage: 56.9% of statements
+ok  	github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator	1.030s	coverage: 100.0% of statements
+ok  	github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi	1.035s	coverage: 96.3% of statements
+
+> go tool cover -func=../reports/backend-coverage.out
+github.com/matheusAmorim123/sezzle-calculator/backend/cmd/server/main.go:19:			main			0.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/cmd/server/main.go:56:			serve			80.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/cmd/server/main.go:81:			withFrontend		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator/calculator.go:35:	Error			100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator/calculator.go:37:	invalid			100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator/calculator.go:38:	undefined		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator/calculator.go:42:	Calculate		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:29:		NewHandler		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:41:		allowMethods		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:54:		calculate		93.1%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:96:		writeDecodeError	100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:105:		writeError		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:109:		writeJSON		100.0%
+total:												(statements)		82.7%
+
+> go tool cover -html=../reports/backend-coverage.out -o ../reports/backend-coverage.html
+
+> go build -trimpath -o ../bin/calculator ./cmd/server
+
+Requested checks passed (backend only).
+Docker and remote CI status are separate checks; they are not certified by this command.

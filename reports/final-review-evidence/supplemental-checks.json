@@ -1,0 +1,14 @@
+[
+  {
+    "name": "frontend-core-typecheck",
+    "exitCode": 0
+  },
+  {
+    "name": "live-api-smoke",
+    "exitCode": 0
+  },
+  {
+    "name": "frontend-core-runtime",
+    "exitCode": 0
+  }
+]

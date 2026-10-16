@@ -1,0 +1,3 @@
+ok  	github.com/matheusAmorim123/sezzle-calculator/backend/cmd/server	1.054s	coverage: 56.9% of statements
+ok  	github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator	1.027s	coverage: 100.0% of statements
+ok  	github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi	1.033s	coverage: 96.3% of statements

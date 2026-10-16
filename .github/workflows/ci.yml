@@ -1,0 +1,94 @@
+name: Verify calculator
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: calculator-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.2'
+          cache: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/verify.mjs --backend-only --race
+      - name: Bounded domain fuzzing
+        working-directory: backend
+        run: go test ./internal/calculator -run='^$' -fuzz=FuzzCalculateFiniteResult -fuzztime=3s -parallel=2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-evidence
+          path: |
+            reports/backend-coverage.*
+            reports/local-verification/
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.2'
+          cache: false
+      - name: Require a committed lockfile
+        run: test -f frontend/package-lock.json || (echo 'Run node scripts/verify.mjs --install --e2e locally and commit the generated lockfile.' && exit 1)
+      - name: Clean dependency installation
+        working-directory: frontend
+        run: npm ci --include=dev --no-audit --no-fund
+      - name: Unit tests, coverage, strict types, production build
+        working-directory: frontend
+        run: npm run verify
+      - name: Install Chromium
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+      - name: Production integration, responsive layout, and accessibility
+        working-directory: frontend
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontend-evidence
+          path: |
+            reports/frontend-coverage/
+            reports/e2e/
+            reports/e2e-results.json
+            reports/e2e-artifacts/
+            reports/screenshots/
+
+  docker:
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build and run the non-root image
+        run: |
+          docker build -t clarity-calculator .
+          docker run -d --name calculator --read-only --cap-drop ALL --security-opt no-new-privileges -p 127.0.0.1:8080:8080 clarity-calculator
+          for i in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:8080/api/v1/health; then break; fi
+            sleep 1
+          done
+          node scripts/smoke-api.mjs
+          curl --fail --silent http://127.0.0.1:8080/ | grep 'id="root"'
+          test "$(docker exec calculator id -u)" != '0'
+      - name: Container diagnostics and cleanup
+        if: always()
+        run: |
+          docker logs calculator || true
+          docker rm -f calculator || true

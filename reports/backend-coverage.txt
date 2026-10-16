@@ -1,0 +1,14 @@
+github.com/matheusAmorim123/sezzle-calculator/backend/cmd/server/main.go:19:			main			0.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/cmd/server/main.go:56:			serve			80.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/cmd/server/main.go:81:			withFrontend		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator/calculator.go:35:	Error			100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator/calculator.go:37:	invalid			100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator/calculator.go:38:	undefined		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/calculator/calculator.go:42:	Calculate		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:29:		NewHandler		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:41:		allowMethods		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:54:		calculate		93.1%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:96:		writeDecodeError	100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:105:		writeError		100.0%
+github.com/matheusAmorim123/sezzle-calculator/backend/internal/httpapi/handler.go:109:		writeJSON		100.0%
+total:												(statements)		82.7%
